@@ -18,7 +18,13 @@
 #
 def triangle(a, b, c):
     # DELETE 'PASS' AND WRITE THIS CODE
-    set_of_sides = {a, b, c}
+    sides = sorted([a, b, c])
+    if any(it <= 0 for it in sides):
+        raise TriangleError
+    elif sides[0] + sides[1] <= sides[2]:
+        raise TriangleError
+
+    set_of_sides = set(sides)
     result = 'scalene'
     if len(set_of_sides) == 1:
         result = "equilateral"

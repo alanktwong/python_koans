@@ -18,7 +18,13 @@
 #
 def triangle(a, b, c):
     # DELETE 'PASS' AND WRITE THIS CODE
-    pass
+    set_of_sides = {a, b, c}
+    result = 'scalene'
+    if len(set_of_sides) == 1:
+        result = "equilateral"
+    elif len(set_of_sides) == 2:
+        result = "isosceles"
+    return result
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError(Exception):

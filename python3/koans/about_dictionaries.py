@@ -26,10 +26,10 @@ class AboutDictionaries(Koan):
         self.assertEqual('dos', babel_fish['2'])
 
     def test_changing_dictionaries(self):
-        babel_fish = { 'one': 'uno', 'two': 'dos' }
-        babel_fish['one'] = 'eins'
+        babel_fish = {'une': 'uno', 'deux': 'dos'}
+        babel_fish['une'] = 'eins'
 
-        expected = {'two': 'dos', 'one': 'eins'}
+        expected = {'deux': 'dos', 'une': 'eins'}
         self.assertDictEqual(expected, babel_fish)
 
     def test_dictionary_is_unordered(self):
@@ -40,7 +40,6 @@ class AboutDictionaries(Koan):
         self.assertDictEqual(dict1, dict2)
         # But they are not the same reference
         self.assertFalse(dict1 is dict2)
-
 
     def test_dictionary_keys_and_values(self):
         babel_fish = {'one': 'uno', 'two': 'dos'}

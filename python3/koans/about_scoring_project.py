@@ -23,10 +23,10 @@ from runner.koan import *
 #
 # Examples:
 #
-# score([1,1,1,5,1]) => 1150 points
+# score([1,1,1,5,1]) => 1150 points = 1000 * 1 + 100 * 1 + 50 * 1
 # score([2,3,4,6,2]) => 0 points
-# score([3,4,5,3,3]) => 350 points
-# score([1,5,1,2,4]) => 250 points
+# score([3,4,5,3,3]) => 350 points  = 100 * 3 + 50 * 1
+# score([1,5,1,2,4]) => 250 points = 50 * 1 + 100 * 2 * 1
 #
 # More scoring examples are given in the tests below:
 #

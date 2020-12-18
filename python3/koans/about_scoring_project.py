@@ -39,15 +39,25 @@ def score(dice):
     if len(dice) > 0:
         freq = {it: dice.count(it) for it in dice}
 
-        dice_set = set(dice)
-        if len(dice) == 3:
-            if freq.get(1, 0) == 3:
-                result = 1000
-            elif len(dice_set) == 1:
-                result = 100 * list(dice_set)[0]
-        else:
-            result += 100 * freq.get(1, 0)
-            result += 50 * freq.get(5, 0)
+        for (key, count) in freq.items():
+            tally = count
+            if key == 1:
+                if count >= 3:
+                    # A set of three ones is 1000 points
+                    result += 1000
+                    tally = max(count - 3, 0)
+                # A one (that is not part of a set of three) is worth 100 points.
+                result += tally * 100
+            else:
+                if count >= 3:
+                    # A set of three numbers (other than ones) is worth 100 times the
+                    # number. (e.g. three fives is 500 points).
+                    result += 100 * key
+                    tally = max(count - 3, 0)
+                if key == 5:
+                    # A five (that is not part of a set of three) is worth 50 points.
+                    result += tally * 50
+
     return result
 
 
@@ -85,10 +95,12 @@ class AboutScoringProject(Koan):
         self.assertEqual(600, score([6, 6, 6]))
 
     def test_score_of_mixed_is_sum(self):
+        # done
         self.assertEqual(250, score([2, 5, 2, 2, 3]))
         self.assertEqual(550, score([5, 5, 5, 5]))
         self.assertEqual(1150, score([1, 1, 1, 5, 1]))
 
     def test_ones_not_left_out(self):
+        # done
         self.assertEqual(300, score([1, 2, 2, 2]))
         self.assertEqual(350, score([1, 5, 2, 2, 2]))

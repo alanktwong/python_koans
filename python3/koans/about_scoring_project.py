@@ -37,18 +37,17 @@ def score(dice):
     # You need to write this method
     result = 0
     if len(dice) > 0:
-        all_fives = [i for i in dice if i == 5]
-        all_ones = [i for i in dice if i == 1]
+        freq = {it: dice.count(it) for it in dice}
+
         dice_set = set(dice)
         if len(dice) == 3:
-            if len(all_ones) == 3:
+            if freq.get(1, 0) == 3:
                 result = 1000
             elif len(dice_set) == 1:
                 result = 100 * list(dice_set)[0]
         else:
-            result += sum([i * 100 for i in all_ones])
-            result += sum([i * 10 for i in all_fives])
-
+            result += 100 * freq.get(1, 0)
+            result += 50 * freq.get(5, 0)
     return result
 
 

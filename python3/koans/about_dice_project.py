@@ -3,7 +3,7 @@
 
 from runner.koan import *
 
-import random
+from random import randint, shuffle
 
 class DiceSet:
     def __init__(self):
@@ -16,7 +16,11 @@ class DiceSet:
     def roll(self, n):
         # Needs implementing!
         # Tip: random.randint(min, max) can be used to generate random numbers
-        pass
+        old_values = self._values
+        self._values = [randint(1, 6) for _ in range(n)]
+        if self._values is not None and self._values == old_values:
+            shuffle(self._values)
+
 
 class AboutDiceProject(Koan):
     def test_can_create_a_dice_set(self):
@@ -30,7 +34,7 @@ class AboutDiceProject(Koan):
         self.assertTrue(isinstance(dice.values, list), "should be a list")
         self.assertEqual(5, len(dice.values))
         for value in dice.values:
-            self.assertTrue(value >= 1 and value <= 6, "value " + str(value) + " must be between 1 and 6")
+            self.assertTrue(1 <= value <= 6, "value " + str(value) + " must be between 1 and 6")
 
     def test_dice_values_do_not_change_unless_explicitly_rolled(self):
         dice = DiceSet()
@@ -48,8 +52,7 @@ class AboutDiceProject(Koan):
         dice.roll(5)
         second_time = dice.values
 
-        self.assertNotEqual(first_time, second_time, \
-            "Two rolls should not be equal")
+        self.assertNotEqual(first_time, second_time, "Two rolls should not be equal")
 
         # THINK ABOUT IT:
         #

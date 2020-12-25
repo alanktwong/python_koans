@@ -18,14 +18,48 @@
 
 from runner.koan import *
 
+
 class Proxy:
     def __init__(self, target_object):
-        # WRITE CODE HERE
+        # Write your attribute initialisations here
+        self._messages = []
 
-        #initialize '_obj' attribute last. Trust me on this!
+        # initialize '_obj' attribute last. Trust me on this!
         self._obj = target_object
 
     # WRITE CODE HERE
+    def __getattr__(self, name):
+        # self_name = type(self).__name__
+        # self_dict = str(self.__dict__)
+        # print(f"Debug GET {self_name}.{name} dict={self_dict}")
+
+        attr = getattr(self._obj, name)
+
+        self._messages.append(name)
+        return attr
+
+    def __setattr__(self, name, value):
+        # self_name = type(self).__name__
+        # self_dict = str(self.__dict__)
+        # str_value = str(value)
+        # print(f"Debug SET {self_name}.{name}={str_value} dict={self_dict}")
+
+        if '_' == name[0]:
+            return object.__setattr__(self, name, value)
+
+        setattr(self._obj, name, value)
+
+        self._messages.append(name + '=')
+
+    def messages(self):
+        return self._messages
+
+    def was_called(self, attr):
+        return self.number_of_times_called(attr) > 0
+
+    def number_of_times_called(self, attr):
+        return len(list(filter(lambda msg: msg == attr, self._messages)))
+
 
 # The proxy object should pass the following Koan:
 #
@@ -51,14 +85,13 @@ class AboutProxyObjectProject(Koan):
         tv.power()
         tv.channel = 10
 
-        self.assertEqual(['power', 'channel'], tv.messages())
+        self.assertEqual(['power', 'channel='], tv.messages())
 
     def test_proxy_handles_invalid_messages(self):
         tv = Proxy(Television())
 
         with self.assertRaises(AttributeError):
             tv.no_such_method()
-
 
     def test_proxy_reports_methods_have_been_called(self):
         tv = Proxy(Television())
@@ -77,7 +110,7 @@ class AboutProxyObjectProject(Koan):
         tv.power()
 
         self.assertEqual(2, tv.number_of_times_called('power'))
-        self.assertEqual(1, tv.number_of_times_called('channel'))
+        self.assertEqual(1, tv.number_of_times_called('channel='))
         self.assertEqual(0, tv.number_of_times_called('is_on'))
 
     def test_proxy_can_record_more_than_just_tv_objects(self):
